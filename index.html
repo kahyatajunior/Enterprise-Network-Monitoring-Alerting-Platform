@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Enterprise Network Monitoring & Cloud Operations</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary">
+        <div class="brand">
+          <span class="brand-mark"></span>
+          <div>
+            <strong>NetOps Command</strong>
+            <small>Monitoring + Cloud Console</small>
+          </div>
+        </div>
+
+        <nav class="nav-list">
+          <a href="#overview" class="active">Overview</a>
+          <a href="#devices">Devices</a>
+          <a href="#alerts">Alerts</a>
+          <a href="#incidents">Incidents</a>
+          <a href="#topology">Topology</a>
+          <a href="#cloud">Cloud</a>
+          <a href="#logs">Logs</a>
+        </nav>
+
+        <section class="side-panel">
+          <span class="panel-label">Agent Fleet</span>
+          <div class="mini-stat">
+            <strong id="agentCount">148</strong>
+            <span>active collectors</span>
+          </div>
+          <div class="health-bar"><span id="fleetBar"></span></div>
+        </section>
+      </aside>
+
+      <main>
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Realtime Infrastructure Operations</p>
+            <h1>Enterprise Network Monitoring & Alerting Platform</h1>
+          </div>
+          <div class="top-actions">
+            <button id="suppressBtn" type="button">Suppress Alerts</button>
+            <button id="scanBtn" type="button">Run Discovery</button>
+          </div>
+        </header>
+
+        <section id="overview" class="metric-grid" aria-label="Operational overview">
+          <article class="metric critical">
+            <span>Critical Alerts</span>
+            <strong id="criticalCount">7</strong>
+            <small>threshold breaches</small>
+          </article>
+          <article class="metric">
+            <span>Online Devices</span>
+            <strong id="onlineCount">137</strong>
+            <small>92.5% reachable</small>
+          </article>
+          <article class="metric">
+            <span>Avg Latency</span>
+            <strong><span id="latencyValue">23</span> ms</strong>
+            <small>WAN edge sample</small>
+          </article>
+          <article class="metric warning">
+            <span>Packet Loss</span>
+            <strong><span id="lossValue">1.8</span>%</strong>
+            <small>branch links</small>
+          </article>
+        </section>
+
+        <section class="dashboard-grid">
+          <article class="panel chart-panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-label">Prometheus-Style Metrics</span>
+                <h2>Server Health Stream</h2>
+              </div>
+              <span class="live-pill">Live</span>
+            </div>
+            <canvas id="metricsChart" width="760" height="260" aria-label="Realtime chart"></canvas>
+            <div class="legend">
+              <span><i class="cpu"></i>CPU</span>
+              <span><i class="ram"></i>RAM</span>
+              <span><i class="disk"></i>Disk</span>
+              <span><i class="bandwidth"></i>Bandwidth</span>
+            </div>
+          </article>
+
+          <article class="panel terminal">
+            <div class="panel-head">
+              <div>
+                <span class="panel-label">SSH Command Module</span>
+                <h2>Remote Session</h2>
+              </div>
+              <span class="status-dot good"></span>
+            </div>
+            <pre id="terminalOutput"></pre>
+          </article>
+        </section>
+
+        <section id="devices" class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Infrastructure Monitoring</span>
+              <h2>Device Health</h2>
+            </div>
+            <div class="segmented" role="tablist" aria-label="Device filters">
+              <button class="active" type="button" data-filter="all">All</button>
+              <button type="button" data-filter="server">Servers</button>
+              <button type="button" data-filter="network">Network</button>
+              <button type="button" data-filter="printer">Printers</button>
+            </div>
+          </div>
+          <div id="deviceGrid" class="device-grid"></div>
+        </section>
+
+        <section class="split-grid">
+          <article id="topology" class="panel topology-panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-label">Topology Map</span>
+                <h2>Network Graph</h2>
+              </div>
+              <span id="topologyStatus" class="topology-status">SNMP polling</span>
+            </div>
+            <svg id="topologyMap" viewBox="0 0 680 380" role="img" aria-label="Network topology map"></svg>
+          </article>
+
+          <article id="alerts" class="panel">
+            <div class="panel-head">
+              <div>
+                <span class="panel-label">Alerting</span>
+                <h2>Alert History</h2>
+              </div>
+              <button id="escalateBtn" type="button">Escalate</button>
+            </div>
+            <div id="alertList" class="event-list"></div>
+          </article>
+        </section>
+
+        <section id="incidents" class="panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Incident Management</span>
+              <h2>Open Incidents</h2>
+            </div>
+            <button id="newIncidentBtn" type="button">Open Incident</button>
+          </div>
+          <div id="incidentTable" class="incident-table"></div>
+        </section>
+
+        <section id="cloud" class="cloud-console">
+          <div class="section-title">
+            <span class="panel-label">Cloud Infrastructure Deployment Dashboard</span>
+            <h2>Provisioning Console</h2>
+          </div>
+          <div class="cloud-grid">
+            <article class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="panel-label">Infrastructure</span>
+                  <h3>Resources</h3>
+                </div>
+                <button id="createVmBtn" type="button">Create VM</button>
+              </div>
+              <div id="resourceCards" class="resource-grid"></div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="panel-label">Pipeline</span>
+                  <h3>Deployment Timeline</h3>
+                </div>
+                <button id="rollbackBtn" type="button">Rollback</button>
+              </div>
+              <ol id="deploymentTimeline" class="timeline"></ol>
+            </article>
+          </div>
+
+          <div class="dashboard-grid">
+            <article class="panel terminal">
+              <div class="panel-head">
+                <div>
+                  <span class="panel-label">IaC Simulation</span>
+                  <h2>Terraform Plan</h2>
+                </div>
+                <button id="generateTerraformBtn" type="button">Generate</button>
+              </div>
+              <pre id="terraformOutput"></pre>
+            </article>
+
+            <article class="panel">
+              <div class="panel-head">
+                <div>
+                  <span class="panel-label">Kubernetes Simulation</span>
+                  <h2>Cluster Status</h2>
+                </div>
+                <span class="live-pill">Syncing</span>
+              </div>
+              <div id="clusterGrid" class="cluster-grid"></div>
+            </article>
+          </div>
+        </section>
+
+        <section id="logs" class="panel logs-panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-label">Logs</span>
+              <h2>Event Stream</h2>
+            </div>
+            <span class="log-count"><span id="logCount">0</span> events</span>
+          </div>
+          <div id="logStream" class="log-stream"></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
